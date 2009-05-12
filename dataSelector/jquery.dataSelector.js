@@ -1,5 +1,5 @@
 /*
-Copyright (c) <year>, Pim Jager
+Copyright (c) 2009, Pim Jager
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
