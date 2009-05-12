@@ -1,0 +1,40 @@
+<html>
+<head>
+<title>Test voor custom jQuery selector params</title>
+	<script src='http://ajax.googleapis.com/ajax/libs/jquery/1.3.1/jquery.min.js' type='text/javascript'></script>
+	<script type='text/javascript' src='../stringQuery/jquery.stringQuery.js'></script>
+	<script type='text/javascript' src='jquery.dataSelector.js'></script>
+	<script type='text/javascript'>
+		$(document).ready( function() {
+			$('#divOne').data('foo', 'bar');
+			$('#divOne:data("foo")').append('<p>I appear to have .data("foo")</p>');
+			$('#divOne:data("foo=bar")').append('<p>My .data("foo") has value "bar"</p>');
+			$('#divOne:data("foo!=pizza")').append('<p>My .data("foo") does not have value "pizza"</p>');
+			$('#divOne:data("foo^=b")').append('<p>My .data("foo") starts with "b"</p>');
+			$('#divOne:data("foo$=ar")').append('<p>My .data("foo") ends with "ar"</p>');
+			$('#divOne:data("foo*=a")').append('<p>My .data("foo") contains "a"</p>');
+			
+			$('#divTwo').data('baz', {a:23, bla:'pizza', inner:{imInner:'hai'}, aBool:false, aPositiveBool:true});
+			$('#divTwo:data("baz.a")').append('<p>My data object has property a (.data("baz").a)</p>');
+			$('#divTwo:data("baz.a=23")').append('<p>My data object has property a with value 23 (.data("baz").a === 23)</p>');
+			$('#divTwo:data("baz.bla=pizza")').append('<p>My data object has property bla with value "pizza" (.data("baz").bla === "pizza")</p>');
+			$('#divTwo:data("baz.inner.imInner=hai")')
+				.append('<p>My data object has property inner with property imIneer with value "hai" (.data("baz").inner.imInner === "hai")</p>');
+			$('#divTwo:data("baz.aBool=false")').append('<p>My data object has property aBool with value false (.data("baz").aBool === false)</p>');
+			$('#divTwo:data("baz.aPositiveBool=true")')
+				.append('<p>My data object has property aPositiveBool with value true (.data("baz").aPositiveBool === true)</p>');
+		});
+	</script>
+	<style type='text/css'>
+		div{ border: 1px solid #000; margin:10px;}
+		p {background-color: #0ca; }
+	</style>
+</head>
+<body>
+<div id='divOne'>
+First Div, I have Data
+</div>
+<div id='divTwo'>
+Second Div, I have a data object
+</div>
+</body>
