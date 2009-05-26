@@ -1,4 +1,4 @@
-/*
+﻿/*
 Copyright (c) 2009, Pim Jager
 All rights reserved.
 
