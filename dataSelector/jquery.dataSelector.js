@@ -25,7 +25,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 (function($){
 	//We use a small helper function that will return true when 'a' is undefined (so we can do if(checkUndefined(data)) return false;
-	//If we would continue with undefined data we would piss javascript off as we would be getting properties of an
+	//If we would continue with undefined data we would throw error as we would be getting properties of an
 	//non-exsitent object (ie typeof data === 'undefined'; data.fooBar; //throws error
 	var checkUndefined = function(a) {
 		return typeof a === 'undefined';
@@ -43,11 +43,9 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 		//We check if the condition was an =, an !=, an $= or an *=
 		var selectType = querySplitted[0].charAt( querySplitted[0].length-1 );
 		if(selectType == '^' || selectType == '$' || selectType == '!' || selectType == '*'){
+            //we need to remove the last char from the dataName (queryplitted[0]) because we plitted on the =
+            //so the !,$,*,^ are still part of the dataname
 			querySplitted[0] = querySplitted[0].substring(0, querySplitted[0].length-1);
-			//the ^=, *= and $= are only available when the $.stringQuery plugin is loaded, if it is not and any of these are used we return false
-			if(!$.stringQuery && selectType != '!'){
-				return false;
-			}
 		}
 		else selectType = '=';
 		var dataName = querySplitted[0]; //dataKey or dataKey.innerDataKey
@@ -74,13 +72,13 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 					return checkAgainst != querySplitted[1];
 				break;
 				case '^': //starts with
-					return $.stringQuery.startsWith(checkAgainst, querySplitted[1]);
+                    return checkAgainst.indexOf(querySplitted[1]) === 0;
 				break;
 				case '$': //ends with
-					return $.stringQuery.endsWith(checkAgainst, querySplitted[1]);
+                    return checkAgainst.substr(checkAgainst.length - querySplitted[1].length) === querySplitted[1];
 				break;
 				case '*': //contains
-					return $.stringQuery.contains(checkAgainst, querySplitted[1]);
+                    return checkAgainst.indexOf(querySplitted[1]) !== -1;
 				break;
 				default: //default should never happen
 					return false;
