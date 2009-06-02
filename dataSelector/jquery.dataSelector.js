@@ -23,6 +23,10 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
+/*
+    Credits for RegEx selector go to Anon:
+    See his comment on: http://james.padolsey.com/javascript/extending-jquerys-selector-capabilities/
+*/
 (function($){
 	//We use a small helper function that will return true when 'a' is undefined (so we can do if(checkUndefined(data)) return false;
 	//If we would continue with undefined data we would throw error as we would be getting properties of an
@@ -34,7 +38,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 		if(checkUndefined(elem) || checkUndefined(params)) return false;
 		//:data(__) accepts 'dataKey', 'dataKey=Value', 'dataKey.InnerdataKey', 'dataKey.InnerdataKey=Value'
 		//Also instead of = we accept: != (does not equal Value), ^= (starts with Value), 
-		//		$= (ends with Value), *=Value (contains Value);
+		//		$= (ends with Value), *=Value (contains Value) ~=Regex returns where data matches regex
 		//$(elem).data(dataKey) or $(elem).data(dataKey)[innerDataKey] (optional more innerDataKeys)
 		//When no value is speciefied we return all elements that have the dataKey specified, similar to [attribute]
 		var query = params[3]; //The part in the parenthesis, thus: selector:data( query )
@@ -42,7 +46,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 		var querySplitted = query.split('='); //for dataKey=Value/dataKey.innerDataKey=Value
 		//We check if the condition was an =, an !=, an $= or an *=
 		var selectType = querySplitted[0].charAt( querySplitted[0].length-1 );
-		if(selectType == '^' || selectType == '$' || selectType == '!' || selectType == '*'){
+		if(selectType == '^' || selectType == '$' || selectType == '!' || selectType == '*' || selectType == '~'){
             //we need to remove the last char from the dataName (queryplitted[0]) because we plitted on the =
             //so the !,$,*,^ are still part of the dataname
 			querySplitted[0] = querySplitted[0].substring(0, querySplitted[0].length-1);
@@ -80,6 +84,12 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 				case '*': //contains
                     return checkAgainst.indexOf(querySplitted[1]) !== -1;
 				break;
+                case '~':
+                    exp = querySplitted[1].substr(1,querySplitted[1].lastIndexOf('/')-1);
+                    modif = querySplitted[1].substr(querySplitted[1].lastIndexOf('/')+1);
+                    re = new RegExp( exp, modif);
+                    return re.test(checkAgainst);
+                break;
 				default: //default should never happen
 					return false;
 				break;

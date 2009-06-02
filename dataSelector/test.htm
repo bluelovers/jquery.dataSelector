@@ -23,6 +23,9 @@
 			$('#divTwo:data("baz.aBool=false")').append('<p>My data object has property aBool with value false (.data("baz").aBool === false)</p>');
 			$('#divTwo:data("baz.aPositiveBool=true")')
 				.append('<p>My data object has property aPositiveBool with value true (.data("baz").aPositiveBool === true)</p>');
+            //Now also supperts Regex matching:
+            $('#divTwo:data("baz.a~=/\\d+/")')
+				.append('<p>My data object has a property a which matches the regex /\\d/ (.data("baz").a.test(/\d/) === true)</p>');
 		});
 	</script>
 	<style type='text/css'>
